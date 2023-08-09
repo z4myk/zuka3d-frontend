@@ -1,0 +1,110 @@
+body {
+  /* font-family: "Roboto", sans-serif !important; */
+  margin: 0;
+  scroll-behavior: smooth !important;
+  overflow-x: hidden !important;
+  /* font-family: 'Bungee', cursive !important; */
+  font-family: 'Ubuntu', sans-serif !important;
+  color: white;
+
+
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+
+.inputBorders{
+  border: 1px solid rgb(0, 75, 155) !important;
+  
+}
+
+.imgLogo{
+  width: 100px;
+  border-radius: 5px;
+}
+
+.modal {
+  background: white;
+  border-radius: 5px;
+  color: rgb(51, 51, 51);
+  display: inline;
+  max-height: 700px;
+  max-width: 640px;
+  outline: none;
+  padding: 10px;
+}
+
+.modal-fondo {
+  background-color: rgba(0, 0, 0, 0.3);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  position: fixed;
+}
+
+.cardProduct{
+  width: 250px;
+  height: 350px;
+  border: 1px solid #ecf019;
+}
+.cardProduct:hover{
+  
+ 
+  cursor: pointer;
+}
+
+ /* efecto menu de navegacion  */
+.efectoLista{
+  position: relative;
+  letter-spacing: 0.5px;
+  padding: 0 10px;
+  margin: 10px;
+  color: #000000 !important;
+}
+.efectoLista:hover{
+  color: #4f4f4f !important;
+}
+
+.efectoLista:after{
+   content: "";
+   position: absolute;
+   background-color: #ecf019;
+   height: 3px;
+   width: 0;
+   left: 0;
+   bottom: 0px;
+   transition: 0.4s;
+}
+
+.efectoLista:hover:after{
+  width: 100%;
+}
+
+.iconoCart:hover{
+  color: #ecf019 !important;
+  cursor: pointer;
+}
+
+.imageCart{
+  width: 56px;
+}
+
+
+.buttonRoundedCart{
+  border-radius: 20px !important;
+}
+
+.btn-light{
+  background-color: #6B35FF !important;
+}
+.btn-light:hover{
+  background-color: #8A60FF !important;
+}
+
+.loginCard{
+  border: 1px solid #6B35FF !important;
+}
