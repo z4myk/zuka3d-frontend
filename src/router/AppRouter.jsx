@@ -66,6 +66,7 @@ export const AppRouter = () => {
         <Navbar />
         <Routes>
           {/* RUTAS PUBLICAS  */}
+
           <Route path="/" element={<HomePage />} />
           <Route path="/contacto" element={<Contact />} />
           <Route path="/preguntas-frecuentes" element={<FAQ />} />
@@ -79,12 +80,22 @@ export const AppRouter = () => {
             }
           />
           <Route path="/carrito" element={<Cart />} />
-          <Route path="/auth/iniciar-sesion" element={<LoginPage />} />
-          <Route path="/auth/registrarse" element={<RegisterPage />} />
+          {
+            (status === 'authenticated') ?
+              (<>
+                <Route path="/auth/iniciar-sesion" element={<Navigate to="/" />} />
+                <Route path="/auth/registrarse" element={<Navigate to="/" />} />
+              </>)
+              :
+              (<><Route path="/auth/iniciar-sesion" element={<LoginPage />} />
+                <Route path="/auth/registrarse" element={<RegisterPage />} />
+              </>)
+          }
+
 
           {/* RUTAS DE ADMINISTRADOR */}
           {status === "authenticated" &&
-          user?.roles?.name === "administrador" ? (
+            user?.roles?.name === "administrador" ? (
             <>
               <Route path="/administracion" element={<Dashboard />} />
               <Route

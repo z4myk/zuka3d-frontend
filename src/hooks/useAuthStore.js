@@ -1,4 +1,3 @@
-import React from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import  { onClearErrorMessage, onChecking, onLogin, onLogout } from '../store/auth/authSlice';
 import productApi from '../api/productsApi';
@@ -60,7 +59,7 @@ export const useAuthStore = () => {
         const token = localStorage.getItem('token');
         if (!token) return dispatch(onLogout());
         try {
-            const { data } = await gamesApi.get('/renew');
+            const { data } = await productApi.get('/renew');
             localStorage.setItem('token', data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
             dispatch(onLogin(data.user));
