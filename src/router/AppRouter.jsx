@@ -6,6 +6,7 @@ import { FAQ } from "../components/pages/FAQ";
 import { Navbar } from "../components/Navbar/Navbar";
 import { Dashboard } from "../components/dashboard/Dashboard";
 import { AddProduct } from "../components/dashboard/AddProduct";
+import { AdminOrders } from "../components/dashboard/AdminOrders";
 import { AdminProductDatabase } from "../components/dashboard/AdminProductDatabase";
 import { AdminCategoryDatabase } from "../components/dashboard/AdminCategoryDatabase";
 import { Footer } from "../components/home/Footer";
@@ -99,6 +100,7 @@ export const AppRouter = () => {
                 path="/administracion/categorias"
                 element={<AdminCategoryDatabase />}
               />
+              <Route path="/administracion/pedidos" element={<AdminOrders />}   />
             </>
           ) : (
             <>

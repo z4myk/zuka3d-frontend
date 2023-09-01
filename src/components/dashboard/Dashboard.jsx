@@ -31,7 +31,9 @@ export const Dashboard = () => {
                         <button className="btn btn-success w-100">Categorias</button>
                         </Link>
                         <hr />
+                        <Link to="/administracion/pedidos">
                         <button className="btn btn-warning w-100 mb-4 text-light"><FontAwesomeIcon icon={faList} className="mx-1"/> Ver pedidos (0)</button>
+                        </Link>
                         
                     </div>
                         <div className="col-sm-12 col-md-8">

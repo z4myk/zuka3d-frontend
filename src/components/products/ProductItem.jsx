@@ -22,7 +22,6 @@ export const ProductItem = ({product}) => {
       }
 
  const handleAddToCart = () => {
-    
     addToCart(activeProduct);
     Swal.fire({
         position: 'top-end',
@@ -54,7 +53,7 @@ export const ProductItem = ({product}) => {
             </div>
             <div className="d-flex justify-content-between">
             <p className="text-success">${product.price} <span className="text-dark">CLP</span></p>
-            <FontAwesomeIcon icon={faCartShopping} className="text-secondary cartHover"/>
+            <FontAwesomeIcon icon={faCartShopping} className="text-secondary cartHover" />
             </div>
             <Link to={`/producto/${product.index}`} className="text-decoration-none">
            <button className="btn btn-light text-light w-100" onClick={handleSubmit} >Ver más</button>
