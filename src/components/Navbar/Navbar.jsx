@@ -14,20 +14,31 @@ import {
   } from "@fortawesome/free-solid-svg-icons";
   import logozukaprint from '../../assets/logozukaprint.png'
   import zukalogo from '../../assets/zukalogo.png'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useCategoryStore } from "../../hooks/useCategoryStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import {useCartContext} from '../../context/CartContext';
 import axios from 'axios'
 export const Navbar = () => {
 
+  const {status, user, startLogout} = useAuthStore();
   const {categorys} = useCategoryStore();
   const {cartItems} = useCartContext();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    startLogout();
+    navigate('/')
+    window.location.reload(); 
+  };
+
 
   return (
     <div>
 
-      <nav className="navbar navbar-expand-lg bg-body-tertiary p-3">
-        <div className="container-fluid ">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className=" container ">
           <a className="navbar-brand" href="#">
             <img src={zukalogo} alt="Zukaprint 3D Logo " className="imgLogo" />
           </a>
@@ -88,25 +99,61 @@ export const Navbar = () => {
                 </a>
                   </Link>
               </li>
-              <li className="nav-item">
+
+              {status === "authenticated" &&
+          user?.roles?.name === "administrador" ? 
+              (
+                <li className="nav-item">
                   <Link to="/administracion" className="text-decoration-none">
                   <a className="nav-link efectoLista" >  
                 Administración
                   </a>
                   </Link>
             </li>
+                )      
+          : (
             <li>
 
             </li>
+
+          )
+        }
             </ul>
            
             <Link to="/carrito" className="mt-1 ">
              <FontAwesomeIcon icon={faCartShopping} className="text-dark iconoCart" size="1x"/>
             </Link>
-             <span class="badge text-dark mb-3 mb-2 ">({cartItems.length})</span>
+             <span class="badge text-dark mb-2 ">({cartItems.length})</span>
+             {status === "authenticated" ? (
+                  <li className="nav-item dropdown mb-4">
+                  <a
+                    className="nav-link"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                   >
+                     <button className="btn btn-outline-warning"><FontAwesomeIcon icon={faUser} className="text-dark" size="1x"/></button>
+                     </a>
+<ul className="dropdown-menu">
+<li>
+<a className="dropdown-item" href="#">
+<b className="text-dark">Mis compras</b>
+</a>
+</li>
+<li>
+<a className="dropdown-item" href="#" onClick={handleLogout}>
+<b className="text-danger">Salir</b>
+</a>
+</li>
+</ul>
+</li>
+)
+  : (
           <Link to="/auth/iniciar-sesion" className="text-decoration-none">
           <button className="btn btn-light p-2 text-light">Iniciar sesión</button>
           </Link>
+             )}
           </div>
 
         </div>

@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProductStore } from "../../hooks/useProductStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import {useCartContext} from '../../context/CartContext';
 import Swal from 'sweetalert2'
 export const ProductPage = () => {
   const params = useParams();
+  const {status} = useAuthStore();
   const { products, activeProduct, setActiveProduct } = useProductStore();
   const {addToCart} = useCartContext();
 
@@ -35,6 +37,13 @@ export const ProductPage = () => {
       {activeProduct === null ? (
         "Cargando..."
       ) : (
+        <>
+
+        {status === "authenticated" ? (
+          <span></span>
+          ) : (
+            <div className="alert alert-danger text-center">Debes iniciar sesión para agregar productos al carrito.</div>
+        )}
         <div className="container text-dark text-center">
           <div className="row container">
             <div className="col-sm-12 col-md-6">
@@ -51,7 +60,12 @@ export const ProductPage = () => {
                 </div>
                 <h3 className="text-success mt-2">${activeProduct.price} <span className="text-dark">CLP</span></h3>
               </div>
-              <button className="btn btn-outline-success w-100" onClick={handleAddToCart}>Agregar al carrito</button>
+              {status === "authenticated" ? (
+                
+                <button className="btn btn-outline-success w-100" onClick={handleAddToCart}>Agregar al carrito</button>
+              ) : (
+                <button className="btn btn-outline-success disabled w-100">Agregar al carrito</button>
+              )}
               <p className="text-dark mt-3">✔️ Paga con tarjeta de débito o crédito mediante webpay.</p>
               <div className="mt-5">
               <table class="table border">
@@ -86,6 +100,7 @@ export const ProductPage = () => {
             </div>
           </div>
         </div>
+        </>
       )}
     </>
   );
