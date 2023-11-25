@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useCartContext } from "../../context/CartContext";
+import {useAuthStore} from '../../hooks/useAuthStore';
 import {Link} from 'react-router-dom';
 export const Cart = () => {
+
+  const {status} = useAuthStore();
+  
   const {
     cartItems,
     removeFromCart,
@@ -11,7 +15,8 @@ export const Cart = () => {
     incrementCart,
   } = useCartContext();
 
-  const shippingCost = 5500;
+  console.log(cartItems)
+  const shippingCost = cartItems.length >= 2 || cartItems[0]?.quantity >= 2 ? 7600 : 5900;
 
   const handleRemoveFromCart = (productId) => {
     removeFromCart(productId);
@@ -19,6 +24,12 @@ export const Cart = () => {
 
   return (
     <>
+  
+     {status === "authenticated" ? (
+          <span></span>
+          ) : (
+            <div className="alert alert-danger text-center">Debes iniciar sesión para continuar con la compra.</div>
+        )}
       <div className="container text-dark">
         <h3>
           <b>Carrito</b>
@@ -30,7 +41,8 @@ export const Cart = () => {
           </div>
         ) : (
           <>
-            <table className="table table-light table-hover table-responsive text-light container">
+          <div className="table-responsive">
+            <table className="table table-light table-hover text-light container">
               <thead>
                 <tr className="">
                   <th>Eliminar</th>
@@ -83,6 +95,7 @@ export const Cart = () => {
               <b>Total del carrito</b>
             </h3>
             <hr />
+            <div className="table-responsive">
             <table class="table border">
               <thead>
                 <tr>
@@ -94,19 +107,17 @@ export const Cart = () => {
               <tbody>
                 <tr>
                   <th scope="col">${getTotalPrice()}</th>
-                  {/* = o + a 30.000 Envio gratis*/}
-                  {/* Envio por default $5.500 */}
                   <td
                     className={
-                      getTotalPrice() >= 30000 ? "text-success" : "text-dark"
+                      getTotalPrice() >= 60000 ? "text-success" : "text-dark"
                     }
                   >
-                    {getTotalPrice() >= 30000 ? (<b>Gratis</b>) : (<b>${shippingCost}</b>)}
+                    {getTotalPrice() >= 60000 ? (<b>Gratis</b>) : (<b>${shippingCost}</b>)}
                   </td>
                   <td>
                     <b>
                       $
-                      {getTotalPrice() >= 30000
+                      {getTotalPrice() >= 60000
                         ? getTotalPrice()
                         : getTotalPrice() + shippingCost}
                     </b>
@@ -114,16 +125,25 @@ export const Cart = () => {
                 </tr>
               </tbody>
             </table>
+            </div>
             <div className="d-flex justify-content-end">
-            <Link to="/finalizar-compra" className="text-decoration-none">          
+            {status === "authenticated" ? (
+              
+              <Link to="/finalizar-compra" className="text-decoration-none"> 
               <button className="btn btn-success p-3 px-5">
-                <b>Finalizar Compra</b>
+                <b>Continuar Pedido</b>
               </button>
             </Link>
+              ) : (
+                <button className="btn btn-success p-3 px-5 disabled ">Continuar Pedido</button>
+              )}         
+             
+            </div>
             </div>
           </>
         )}
       </div>
+
     </>
   );
 };

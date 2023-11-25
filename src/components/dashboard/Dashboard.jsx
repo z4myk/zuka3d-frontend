@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useProductStore } from '../../hooks/useProductStore';
 import {useCategoryStore} from '../../hooks/useCategoryStore';
+import {useOrderStore} from '../../hooks/useOrderStore';
 import {
     faList,
   } from "@fortawesome/free-solid-svg-icons";
@@ -10,12 +11,12 @@ export const Dashboard = () => {
 
     const {products, startLoadingProducts} = useProductStore();
     const {categorys, startLoadingCategory} = useCategoryStore();
+    const {orders} = useOrderStore();
 
-
-
-
-    return (
-        <>
+    const ordersInConfirmation = orders.filter((order) => order.status === "En Proceso de Confirmación")
+ 
+      return (
+          <>
             <h1 className="text-dark text-center mb-5">Administración</h1>
 
             <section className="container text-dark">
@@ -32,19 +33,24 @@ export const Dashboard = () => {
                         </Link>
                         <hr />
                         <Link to="/administracion/pedidos">
-                        <button className="btn btn-warning w-100 mb-4 text-light"><FontAwesomeIcon icon={faList} className="mx-1"/> Ver pedidos (0)</button>
+    <button className="btn btn-success w-100 mb-4 text-light"><FontAwesomeIcon icon={faList} className="mx-1"/> Ver pedidos <span class="badge text-bg-danger">{ordersInConfirmation.length}</span></button>
                         </Link>
                         
                     </div>
                         <div className="col-sm-12 col-md-8">
                             <h4 className="text-center">Panel de visualización</h4>
                             <hr />
-                            <div className="d-flex justify-content-center">
-                                <div className="mx-2 ">
+
+                            <div className="text-center">
+                                <div className="mx-2 card shadow-lg p-4">
                                 <p>Productos cargados: ({products.length})</p>
+                                <p></p>
                                 </div>
-                                <div>
+                                <div className="mx-2 mt-2 card shadow-lg p-4">
                                 <p>Categorias cargadas: ({categorys.length})</p>
+                                </div>
+                                <div className="mx-2 mt-2 card shadow-lg p-4">
+                                <p>Pedidos cargados: ({orders.length})</p>
                                 </div>
                             </div>
 

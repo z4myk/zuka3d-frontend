@@ -1,18 +1,15 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faGear,
-  faMagnifyingGlass,
-  faRightToBracket,
-  faScrewdriver,
   faUser,
-  faTowerCell,
+  faCircleQuestion,
   faListUl,
   faHome,
   faCartShopping,
   faPhone,
+  faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
-import logozukaprint from '../../assets/logozukaprint.png'
+
 import zukalogo from '../../assets/zukalogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCategoryStore } from "../../hooks/useCategoryStore";
@@ -23,7 +20,7 @@ export const Navbar = () => {
 
   const { status, user, startLogout } = useAuthStore();
   const { categorys } = useCategoryStore();
-  const { cartItems } = useCartContext();
+  const { cartItems, setSearchProduct } = useCartContext();
 
   const navigate = useNavigate();
 
@@ -32,6 +29,10 @@ export const Navbar = () => {
     navigate('/')
     window.location.reload();
   };
+
+  const clearSearchInput = () => {
+    setSearchProduct([])
+  }
 
 
   return (
@@ -55,7 +56,7 @@ export const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse " id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0  ">
-              <li className="nav-item">
+              <li className="nav-item" onClick={clearSearchInput}>
                 <Link to="/" className="text-decoration-none">
                   <a className="nav-link efectoLista" aria-current="page" href="#">
                     <FontAwesomeIcon icon={faHome} className="text-warning" /> INICIO
@@ -70,11 +71,11 @@ export const Navbar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <FontAwesomeIcon icon={faListUl} className="text-warning" /> CATEGORIAS
+                  <FontAwesomeIcon icon={faListUl} className="text-warning" /> CATEGORÍAS
                 </a>
                 <ul className="dropdown-menu">
                   {categorys.map(({ cat }) => (
-                    <Link to={`/producto/categoria/${cat}`} className="text-decoration-none" key={cat}>
+                    <Link to={`/producto/categoria/${cat}`} className="text-decoration-none" key={cat._id}>
                       <li>
                         <a className="dropdown-item" href="#">
                           <b>{cat}</b>
@@ -85,21 +86,21 @@ export const Navbar = () => {
 
                 </ul>
               </li>
-              <li className="nav-item">
-                <Link to="/preguntas-frecuentes" className="text-decoration-none">
-                  <a className="nav-link efectoLista" aria-current="page" href="#">
-                    <FontAwesomeIcon icon={faTowerCell} className="text-warning" /> PREGUNTAS FRECUENTES
-                  </a>
-                </Link>
-              </li>
+         
               <li className="nav-item">
                 <Link to="/contacto" className="text-decoration-none">
-                  <a className="nav-link efectoLista" href="#">
+                  <a className="nav-link efectoLista " href="#">
                     <FontAwesomeIcon icon={faPhone} className="text-warning" /> CONTACTO
                   </a>
                 </Link>
               </li>
-
+              <li className="nav-item">
+                <Link to="/como-comprar" className="text-decoration-none">
+                  <a className="nav-link efectoLista" aria-current="page" href="#">
+                    <FontAwesomeIcon icon={faCircleQuestion} className="text-warning" /> ¿Cómo Comprar?
+                  </a>
+                </Link>
+              </li>
               {status === "authenticated" &&
                 user?.roles?.name === "administrador" ?
                 (
@@ -123,7 +124,7 @@ export const Navbar = () => {
             <Link to="/carrito" className="mt-1 ">
               <FontAwesomeIcon icon={faCartShopping} className="text-dark iconoCart" size="1x" />
             </Link>
-            <span className="badge text-dark mb-2 ">({cartItems.length})</span>
+            <span className="badge text-dark mb-2 ">({status === 'not-authenticated' ? cartItems.length : cartItems.length})</span>
             {status === "authenticated" ? (
               <li className="nav-item dropdown mb-4">
                 <a
@@ -133,13 +134,15 @@ export const Navbar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <button className="btn btn-outline-warning"><FontAwesomeIcon icon={faUser} className="text-dark" size="1x" /></button>
+                  <button className="btn btn-outline-warning"><FontAwesomeIcon icon={faUser} className="text-dark" size="1x" /> <FontAwesomeIcon icon={faSortDown} className="mb-1" /></button>
                 </a>
                 <ul className="dropdown-menu">
                   <li>
+                      <Link to="/mis-compras" className="text-decoration-none">
                     <a className="dropdown-item" href="#">
                       <b className="text-dark">Mis compras</b>
                     </a>
+                      </Link>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#" onClick={handleLogout}>
@@ -161,7 +164,7 @@ export const Navbar = () => {
       </nav>
 
 
-
+      
     </div>
 
   );

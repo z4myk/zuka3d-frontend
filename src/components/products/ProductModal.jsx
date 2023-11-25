@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {useProductStore} from '../../hooks/useProductStore';
+import {useCategoryStore} from '../../hooks/useCategoryStore';
 import {useUiStore} from '../../hooks/useUiStore';
-
+import Swal from "sweetalert2";
 Modal.setAppElement("#root");
 
 const customStyles = {
@@ -20,11 +21,12 @@ const customStyles = {
 export const ProductModal = () => {
     const { isDateModalOpen, closeDateModal } = useUiStore();
     const { startSavingProducts, activeProduct } = useProductStore();
-
+    const { categorys, startLoadingCategory } = useCategoryStore();
 
     const [formValues, setFormValues] = useState({
         name: "",
         description: "",
+        category:"",
         price: "",
         broad: "",
         depth: "",
@@ -53,8 +55,14 @@ export const ProductModal = () => {
     
       const handleSave = async(event) => {
         event.preventDefault();
-        await startSavingProducts(formValues);
-
+       await startSavingProducts(formValues);
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "El producto fue editado con éxito!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
         closeDateModal();
       };
 
@@ -75,7 +83,6 @@ export const ProductModal = () => {
       style={customStyles}
       className="modal"
       overlayClassName="modal-fondo"
-      closeTimeoutMS={1000}
     >
       <h2 className="text-center pt-1"> Editar Producto </h2>
       <hr className=""/>
@@ -98,6 +105,19 @@ export const ProductModal = () => {
           onChange={onInputChange}
           value={formValues.price}
         />
+            <label>Categoría:</label>
+            <select
+              class="form-select"
+              placeholder="Categoría"
+              name="category"
+              value={formValues.category}
+              onChange={onInputChange}
+            >
+              <option selected>Seleccionar categoría</option>
+              {categorys.map(({cat}) => (
+                <option>{cat}</option>
+              ))}
+            </select>
         <label>Descripción</label>
         <textarea
           type="text"

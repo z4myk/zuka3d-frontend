@@ -3,6 +3,8 @@ import { productSlice } from "../store/products/productSlice";
 import { categorySlice } from "../store/categorys/categorySlice";
 import {uiSlice} from "../store/UI/uiSlice";
 import {authSlice} from '../store/auth/authSlice';
+import {orderSlice} from '../store/orders/orderSlice';
+import {paymentSlice} from '../store/payment/paymentSlice';
 export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -14,5 +16,7 @@ export const store = configureStore({
     category: categorySlice.reducer,
     ui: uiSlice.reducer,
     auth: authSlice.reducer,
+    order: orderSlice.reducer,
+    payment: paymentSlice.reducer,
   }
 }) 

@@ -5,12 +5,16 @@ import {
     faTrashCan,
   } from "@fortawesome/free-solid-svg-icons";
   import {useCategoryStore} from '../../hooks/useCategoryStore';
+  import {useUiStore} from '../../hooks/useUiStore';
+  import {AdminCategoryModal} from '../dashboard/AdminCategoryModal';
+
+
   import Swal from "sweetalert2";
 export const AdminCategoryDatabaseItem = ({category}) => {
 
 
     const {startDeleteCategory, setActiveCategory} = useCategoryStore();
-
+    const {openCategoryModal} = useUiStore();
     const handleDelete = () => {
         setActiveCategory(category)
         Swal.fire({
@@ -30,14 +34,19 @@ export const AdminCategoryDatabaseItem = ({category}) => {
         })
     }
 
+    const handleEdit = () => {
+        openCategoryModal();
+        setActiveCategory(category);
+
+    }
 
 
     return (
         <>
-        <tr className="">
+        <tr className="" key={category._id}>
             <td>{category.cat}</td>
             <td className="d-flex gap-1">
-                <button className="btn btn-warning text-light" >
+                <button className="btn btn-warning text-light" onClick={handleEdit} >
                     <FontAwesomeIcon icon={faPencil} />
                 </button>{" "}
                 <br />{" "}
@@ -46,7 +55,7 @@ export const AdminCategoryDatabaseItem = ({category}) => {
                 </button>
             </td>
         </tr>
-
+        <AdminCategoryModal />
     </>
 )
     

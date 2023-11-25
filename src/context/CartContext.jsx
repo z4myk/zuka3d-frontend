@@ -1,6 +1,7 @@
 import React from 'react'
 import { createContext, useContext, useState} from "react";
 import {useProductStore} from '../hooks/useProductStore';
+import {useNavigate} from 'react-router-dom'
 export const CartContext = createContext();
 
 
@@ -11,6 +12,12 @@ export function useCartContext() {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const {products} = useProductStore();
+  const [inputSearch, setInputSearch] = useState("");
+    const [search, setSearch] = useState("");
+    const [searchProduct, setSearchProduct] = useState([]);
+    const [msgError, setMsgError] = useState(false);
+
 
   const addToCart = (product) => {
     const existingProduct = cartItems.find((item) => item._id === product._id);
@@ -65,11 +72,36 @@ export const CartProvider = ({ children }) => {
 
   }
 
+  const getSearchProduct = () => {
+    setMsgError(false)
+    const filterData = products.filter((product) => product.name.toLowerCase().includes(inputSearch.toLowerCase())).reverse();
+    setSearch(inputSearch)
+    setInputSearch("")
+    if (inputSearch.trim() === "" ){ 
+        setMsgError(true)
+    } else {
+        setMsgError(false)
+        setSearchProduct(filterData);
+    }
+  
+  };
+
+ 
+
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        inputSearch,
+        setInputSearch,
+        search,
+        setSearch,
+        searchProduct,
+        msgError,
+        setMsgError,
+        setSearchProduct,
+        getSearchProduct,
         setCartItems,
         addToCart,
         removeFromCart,
@@ -77,6 +109,7 @@ export const CartProvider = ({ children }) => {
         getTotalQuantity,
         handleQuantityChange,
         incrementCart,
+        
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import zukalogo from '../../assets/zukalogo.png'
 import {Link} from 'react-router-dom'
 import {useForm} from '../../hooks/useForm';
@@ -14,12 +14,23 @@ const formFields = {
 export const RegisterPage = () => {
     
     const {email, password, validPassword, onInputChange, formState} = useForm(formFields)
-    const {startRegister} = useAuthStore();
+    const {startRegister, errorMessage} = useAuthStore();
     
-    console.log(formState)
+ 
     const handleRegister = async(e) => {
         e.preventDefault();
-        if(password !== validPassword) return console.log('Las contraseñas no coinciden!');
+        
+        if(password !== validPassword){
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error",
+                text: "¡Las contraseñas no coinciden!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              return;
+        }
         try{
             const response = await startRegister(formState);
             if (response && response.status) {
@@ -34,14 +45,28 @@ export const RegisterPage = () => {
                 }
               }
         }catch(error){
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error de credenciales",
+                text: "Por favor, verifica tu email y contraseña.",
+                showConfirmButton: false,
+                timer: 1500,
+              });
             console.log(error)
         }
 
     }
 
+    useEffect(() => {
+        if (errorMessage !== undefined) {
+          Swal.fire('Error en la autenticación', errorMessage, 'error');
+        }
+      }, [errorMessage])
+
     return (
         <>
-        <section className="container shadow-lg text-dark card">
+        <section className="container shadow-lg text-dark pb-3 card">
         <div className="text-center">
             <img src={zukalogo} alt="Zuka logotipo" className="w-50" /> 
         </div>
@@ -62,7 +87,7 @@ export const RegisterPage = () => {
 
             <button className="btn btn-warning text-light w-100 mt-2" type="submit">Registrarse</button>
             <div className="mt-3 ">
-      <Link className="text-center text-decoration-none mx-5" to='/auth/iniciar-sesion'><b>Iniciar Sesión en zuka.cl</b></Link>
+      <Link className="text-center text-decoration-none mx-5" to='/auth/iniciar-sesion'><b>Iniciar Sesión en zuka3d.cl</b></Link>
     </div>
         </form>
         </div>

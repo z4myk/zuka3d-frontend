@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useProductStore } from "../../hooks/useProductStore";
@@ -38,7 +38,7 @@ export const AddProduct = () => {
 
   const { categorys, startLoadingCategory } = useCategoryStore();
 
-  
+  const navigate = useNavigate();
 
 
   const types = ["image/png", "image/jpeg"];
@@ -54,6 +54,7 @@ export const AddProduct = () => {
 
     // Validar si formState.image está definido
     if (formState.image !== undefined) {
+      console.log(formState.image)
       const formData = new FormData();
       formData.append("name", formState.name);
       formData.append("category", formState.category);
@@ -69,12 +70,13 @@ export const AddProduct = () => {
         if (response && response.status) {
           if (response.status === 200 || response.status === 201) {
             Swal.fire({
-              position: "top-end",
+              position: "center",
               icon: "success",
               title: "El producto fue agregado con éxito!",
               showConfirmButton: false,
               timer: 1500,
             });
+            navigate("/administracion/productos")
           }
         }
         onResetForm(formState);

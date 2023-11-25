@@ -1,9 +1,7 @@
 body {
-  /* font-family: "Roboto", sans-serif !important; */
   margin: 0;
   scroll-behavior: smooth !important;
   overflow-x: hidden !important;
-  /* font-family: 'Bungee', cursive !important; */
   font-family: 'Ubuntu', sans-serif !important;
   color: white;
 
@@ -159,3 +157,59 @@ html {
 .cartHover:hover{
   color: rgb(42, 160, 42) !important;
 }
+
+
+.deleteBullet{
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.imagenAt{
+  width: 40px;
+  border: 1px solid rgba(255, 0, 0, 0.44);
+}
+
+.misComprasCard{
+  border: 1px solid  #8A60FF !important ;
+}
+
+.textMarquee{
+  color: #8A60FF !important;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: rgb(255, 255, 255) !important;        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #8A60FF;    /* color of the scroll thumb */
+  border-radius: 10px;       /* roundness of the scroll thumb */
+  /* border: 1px solid rgb(0, 0, 0);  creates padding around scroll thumb */
+}
+
+.floating-button{
+  position: fixed !important; 
+  bottom: 30px; /* Ajusta la distancia desde la parte inferior según sea necesario */
+  right: 0px; /* Ajusta la distancia desde la derecha según sea necesario */
+  color: #fff; /* Color del texto del botón */
+  padding: 10px 20px; /* Ajusta el relleno del botón según sea necesario */
+  border: none; /* Quita el borde del botón si lo deseas */
+  border-radius: 15px !important; /* Ajusta la esquina del botón según sea necesario */
+  cursor: pointer; /* Cambia el cursor al pasar el ratón sobre el botón */
+  /* Otros estilos del botón, como transiciones, sombras, etc., según sea necesario */
+  z-index: 999;
+}
+
+
+.imgLogoFooter{
+  width: 40px;
+}
+
+
+
+
+

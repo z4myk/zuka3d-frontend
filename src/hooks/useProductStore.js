@@ -2,11 +2,11 @@
 import {useDispatch, useSelector} from 'react-redux'
 import {onLoadingProducts, onSetActiveProduct, onAddProduct, onSetProducts, onUpdateProduct, onDeleteProduct, onSetError, onClearError} from '../store/products/productSlice';
 import productApi from '../api/productsApi';
-
+import {useState} from 'react'
 
 
 export const useProductStore = () => {
-
+  const [productSearch, setProductSearch] = useState([]);
     const {products, isLoading, activeProduct, errorMessage, onSetError} = useSelector(state => state.product);
     const dispatch = useDispatch();
 
@@ -57,6 +57,13 @@ export const useProductStore = () => {
         }
     };
 
+    const searchProducts = (query) => {
+      const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setProductSearch(filteredProducts);
+    };
+
 
 
     return {
@@ -71,6 +78,7 @@ export const useProductStore = () => {
         setActiveProduct,
         startSavingProducts,
         startDeleteProduct,
+        searchProducts,
 
     }
     

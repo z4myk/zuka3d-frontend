@@ -1,20 +1,28 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useCartContext } from "../../context/CartContext";
-import {useForm} from '../../hooks/useForm';
-
+import { useForm } from "../../hooks/useForm";
+import {useAuthStore} from '../../hooks/useAuthStore';
+import {useOrderStore} from '../../hooks/useOrderStore';
+import {useNavigate} from 'react-router-dom';
+import Swal from 'sweetalert2'
+import axios from 'axios'
 const formFields = {
-  name: '',
-  surname: '',
-  country: 'Chile',
-  address: '',
-  region: '',
-  comuna: '',
-  phone: '',
-  email: '',
-  rut: '',
+  name: "",
+  lastname: "",
+  country: "Chile",
+  address: "",
+  region: "",
+  comuna: "",
+  phone: "",
+  rut: "",
+  email: "",
+  totalPrice: "",
+  details: "",
+  trackingCode: "No disponible",
+  status: "Sin Informar",
+  terms: false,
 
-}
-
+};
 export const Checkout = () => {
   const region = [
     "Aisén del General Carlos Ibañez del Campo",
@@ -34,53 +42,171 @@ export const Checkout = () => {
     "Tarapacá",
     "Valparaíso",
   ];
-
+  
   const comuna = [
+    "Alhué",
     "Bulnes",
+    "Buín",
     "Chillán",
+    "Calera de Tango",
+    "Cerro Navia",
+    "Colina",
+    "Conchalí",
+    "Curacaví",
     "Chillán Viejo",
+    "Cerrillos",
     "Cobquecura",
     "Coelemu",
     "Coihueco",
+    "El Bosque",
+    "El Monte",
+    "Estación Central",
     "El Carmen",
+    "Huechuraba",
+    "Independencia",
+    "Isla de Maipo",
+    "La Cisterna",
+    "La Florida",
+    "La Granja",
+    "La Pintana",
+    "La Reina",
+    "Lampa",
+    "Las Condes",
+    "Lo Bernechea",
+    "Lo Espejo",
+    "Lo Prado",
     "Ninhue",
+    "Macul",
+    "Maipú",
+    "María Pinto",
+    "Melipilla",
+    "Ñuñoa",
     "Ñiquén",
     "Pemuco",
+    "Padre Hurtado",
+    "Paine",
+    "Pedro Aguirre Cerda",
+    "Peñaflor",
+    "Peñalolén",
+    "Pirque",
+    "Providencia",
+    "Pudahuel",
+    "Puente Alto",
     "Pinto",
     "Portezuelo",
+    "Qilicura",
+    "Quinta Normal",
     "Quillón",
     "Quirihue",
+    "Recoleta",
+    "Renca",
     "Ranqui",
+    "San Bernardo",
+    "San Joaquín",
+    "San Jose de Maipo",
+    "San Miguel",
+    "San Pedro",
+    "San Ramón",
+    "Santiago",
     "San Carlos",
     "San Fabián de Alico",
     "San Ignacio",
     "San Nicolás",
     "Tregueco",
+    "Talagante",
+    "Tiltil",
+    "Vitacura",
     "Yungay",
   ];
-  const shippingCost = 5500;
 
-  const { cartItems, getTotalPrice } = useCartContext();
-  const {onInputChange, formState} = useForm(formFields);
+  console.log(comuna.length)
+  
+  const { cartItems, getTotalPrice} = useCartContext();
+  const { status, checkAuthToken, user } = useAuthStore();
+  const { startSavingOrders } = useOrderStore();
+  const shippingCost = cartItems.length >= 2 || cartItems[0].quantity >= 2 ? 7600 : 5900;
+  const userEmail = user.email;
+  const URL = import.meta.env.VITE_API_URL;
+ const navigate = useNavigate();
+  const { onInputChange, formState, onResetForm } = useForm(formFields);
 
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
+  const calculateTotalPrice = () => {
+    const lastTotalPrice = getTotalPrice() >= 80000 ? getTotalPrice() : getTotalPrice() + shippingCost;
+    return lastTotalPrice;
+  };
+  
+  const calculateDetails = () => {
+    const totalDetails = cartItems.map((items) => (items.name + " " + "X" + items.quantity ))
+    return totalDetails;
   };
 
+  const clearShopInformationAndRedirect = () => {
+    navigate("/mis-compras");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000)
+  }
+  
+  const formData = {
+    name: formState.name,
+    lastname: formState.lastname,
+    country: formState.country,
+    address: formState.address,
+    region: formState.region,
+    comuna: formState.comuna,
+    phone: formState.phone,
+    email: userEmail,
+    rut: formState.rut,
+    status: formState.status,
+    terms: formState.terms,
+    trackingCode: formState.trackingCode,
+    totalPrice: calculateTotalPrice(),
+    details: calculateDetails(),
+  };
 
-  console.log(formState)
+    const handleCheckboxChange = (event) => {
+      const { name, checked } = event.target;
+      onInputChange({ target: { name, value: checked } }); 
+    };
+    
+
+    
+    
+    const handleSubmit = async(e) => {
+      e.preventDefault();
+      
+      console.log(formData)
+      try{
+        const res = await axios.post(`${URL}/orders`, formData)
+        if (res && res.status) {
+          if (res.status === 200 || res.status === 201) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "El pedido fue realizado con éxito!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setTimeout(() => {
+              clearShopInformationAndRedirect();
+            }, 2000)
+          }
+        }
+      }catch(error){
+          console.log(error)
+      }
+    }
+  
   return (
     <>
-      <form>
-      <div className="row text-dark mx-4 container ">
-        <div className="col-sm-12 col-md-6 ">
-          <h3 className="text-center mb-4">
-            <b>Facturación y envío</b>
-            <hr />
-          </h3>
-          
+      <form onSubmit={handleSubmit}>
+        <div className="row text-dark mx-4 container ">
+          <div className="col-sm-12 col-md-6 ">
+            <h3 className="text-center mb-4 mt-4">
+              <b>Facturación y envío</b>
+              <hr />
+            </h3>
+
             <div className="d-flex justify-content-between">
               <div className="mb-3">
                 <label>
@@ -104,10 +230,10 @@ export const Checkout = () => {
                 <input
                   type="text"
                   placeholder="Apellido"
-                  name="surname"
+                  name="lastname"
                   className="w-100  form-control border-dark"
                   onChange={onInputChange}
-                  value={formState.surname}
+                  value={formState.lastname}
                   required
                 />
               </div>
@@ -193,7 +319,8 @@ export const Checkout = () => {
                 name="email"
                 placeholder="example@example.com"
                 onChange={onInputChange}
-                value={formState.email}
+                value={userEmail}
+                disabled
               />
             </div>
 
@@ -210,88 +337,94 @@ export const Checkout = () => {
                 value={formState.rut}
               />
             </div>
-          
-        </div>
+          </div>
 
-        <div className="col-sm-12 col-md-6 mt-4">
-          <h3 className="text-center">
-            <b>Tu pedido</b>
-            <hr />
-          </h3>
-          <div className="p-2 w-75">
-            <table className="table table-light table-hover table-responsive text-light container ">
-              <thead>
-                <tr className="border">
-                  <th>Producto</th>
-                  <th>Cantidad</th>
-                  <th>Envío</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cartItems.map((items) => (
-                  <tr className="border" key={items._id}>
-                    <td className="p-3">{items.name}</td>
-                    <td>{items.quantity}</td>
-                    <td
-                      className={
-                        getTotalPrice() >= 30000 ? "text-success" : "text-dark"
-                      }
-                    >
-                      {getTotalPrice() >= 30000 ? (
-                        <b>Gratis</b>
-                      ) : (
-                        <b>${shippingCost}</b>
-                      )}
-                    </td>
-                    <td>${items.price * items.quantity}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="d-flex justify-content-around bg-light pt-2 border">
-              <b className="">Total a pagar:</b>
-              <p>
-                <b className="text-success">
-                  $
-                  {getTotalPrice() >= 30000
-                    ? getTotalPrice()
-                    : getTotalPrice() + shippingCost}
-                </b>
-              </p>
-            </div>
-            <div className="bg-light p-3 border mt-3">
-              <p>
-                <b>
-                  Sus datos personales se utilizarán para procesar su pedido,
-                  respaldar su experiencia en este sitio web y para otros fines
-                  descritos en nuestra{" "}
-                  <span className="text-danger">Política de Privacidad</span>
-                </b>
-              </p>
+          <div className="col-sm-12 col-md-6 ">
+            <h3 className="text-center mt-4">
+              <b>Tu pedido</b>
               <hr />
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value="terms"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  id="flexCheckDefault"
-                  required
-                />
-                <label className="form-check-label" for="flexCheckDefault">
-                  He leído y estoy de acuerdo con los{" "}
-                  <b className="text-danger">términos y condiciones</b> de la
-                  web <span className="text-danger">*</span>
-                </label>
+            </h3>
+            <div className="p-2 w-100">
+              <table className="table table-light table-hover table-responsive text-light container">
+                <thead>
+                  <tr className="border text-center">
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center">
+                  {cartItems.map((items) => (
+                    <tr className="border" key={items._id}>
+                      <td className="p-3">{items.name}</td>
+                      <td>{items.quantity}</td>
+                      <td>${items.price * items.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="d-flex justify-content-evenly bg-light pt-2 border">
+                <b className="">Costo de envío:</b>
+                <p>
+                  <b 
+                        className={
+                          getTotalPrice() >= 80000
+                            ? "text-success"
+                            : "text-dark"
+                        }
+                      >
+                        {getTotalPrice() >= 80000 ? (
+                          <b className="">Gratis</b>
+                        ) : (
+                          <b>${shippingCost}</b>
+                        )}
+                      
+                  </b>
+                </p>
               </div>
+              <div className="d-flex justify-content-evenly  bg-light pt-2 border">
+                <b className="">Total a pagar:</b>
+                <p>
+                  <b className="text-success">
+                  ${calculateTotalPrice()}
+                  </b>
+                </p>
+              </div>
+              <div className="bg-light p-3 border mt-3">
+                <p className="text-center">
+                  <b>
+                    Sus datos personales se utilizarán para procesar su pedido,
+                    respaldar su experiencia en este sitio web y para otros
+                    fines descritos en nuestra{" "}
+                    <span className="text-danger">Política de Privacidad</span>.
+                  </b>
+                </p>
+                <hr />
+                {/* <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="terms"
+                    value={formState.terms}
+                    checked={formState.terms}
+                    onChange={handleCheckboxChange}
+                    id="flexCheckDefault"
+                    required
+                  />
+                  <label className="form-check-label" for="flexCheckDefault">
+                    He leído y estoy de acuerdo con los{" "}
+                    <b className="text-danger">términos y condiciones</b> de la
+                    web <span className="text-danger">*</span>
+                  </label>
+                </div> */}
+              </div>
+              <button className="btn btn-success w-100 mt-1" type="submit">
+                <b>Realizar Pedido</b>
+              </button>
             </div>
-                <button className="btn btn-success w-100 mt-1" type="submit"><b>Realizar Pedido</b></button>
           </div>
         </div>
-      </div>
-        </form>
+      </form>
     </>
   );
 };

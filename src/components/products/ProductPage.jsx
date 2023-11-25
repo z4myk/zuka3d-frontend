@@ -3,12 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useProductStore } from "../../hooks/useProductStore";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import {useCartContext} from '../../context/CartContext';
+import {ProductRecommended} from '../products/ProductRecommended';
 import Swal from 'sweetalert2'
 export const ProductPage = () => {
   const params = useParams();
   const {status} = useAuthStore();
   const { products, activeProduct, setActiveProduct } = useProductStore();
   const {addToCart} = useCartContext();
+  const navigate = useNavigate()
+  // const recommendedProducts = products.filter((product) => activeProduct.category === product.category  && activeProduct._id !== product._id).slice(0, 4);
+
 
   const handleAddToCart = () => {
     addToCart(activeProduct);
@@ -22,14 +26,16 @@ export const ProductPage = () => {
     
   };
 
-  useEffect(() => {
-    if (activeProduct == null && products.length > 0) {
-      const { 0: product } = products.filter(
-        (product) => product.index === params.index
-      );
-      setActiveProduct(product);
-    }
-  }, [products]);
+
+    useEffect(() => {
+      if (activeProduct == null && products.length > 0) {
+        const { 0: product } = products.filter(
+          (product) => product.index === params.index
+          );
+          setActiveProduct(product)
+      }
+    }, [products]);
+  
 
 
   return (
@@ -39,34 +45,25 @@ export const ProductPage = () => {
       ) : (
         <>
 
-        {status === "authenticated" ? (
-          <span></span>
-          ) : (
-            <div className="alert alert-danger text-center">Debes iniciar sesión para agregar productos al carrito.</div>
-        )}
+       
         <div className="container text-dark text-center">
-          <div className="row container">
+          <div className="row container pt-2">
             <div className="col-sm-12 col-md-6">
-              <h1 className="text-dark text-center">{activeProduct.name}</h1>
+              <h1 className="text-dark text-center">{activeProduct?.name}</h1>
               <hr />
               <div className="">
                 <span>Categoría:</span>
                 <br />
-                <span className="text-secondary">{activeProduct.category}</span>
+                <span className="text-secondary">{activeProduct?.category}</span>
                 <div className="mt-3">
                   <span>Descripción:</span>
                   <br />
-                  <span>{activeProduct.description}</span>
+                  <span>{activeProduct?.description}</span>
                 </div>
-                <h3 className="text-success mt-2">${activeProduct.price} <span className="text-dark">CLP</span></h3>
+                <h3 className="text-success mt-2">${activeProduct?.price} <span className="text-dark">CLP</span></h3>
               </div>
-              {status === "authenticated" ? (
-                
                 <button className="btn btn-outline-success w-100" onClick={handleAddToCart}>Agregar al carrito</button>
-              ) : (
-                <button className="btn btn-outline-success disabled w-100">Agregar al carrito</button>
-              )}
-              <p className="text-dark mt-3">✔️ Paga con tarjeta de débito o crédito mediante webpay.</p>
+              <p className="text-dark mt-3">✔️ Paga con deposito o transferencia bancaria.</p>
               <div className="mt-5">
               <table class="table border">
   <thead>
@@ -80,9 +77,9 @@ export const ProductPage = () => {
   <tbody>
     <tr>
       <th scope="row">#</th>
-      <td>{activeProduct.broad}cm</td>
-      <td>{activeProduct.height}cm</td>
-      <td>{activeProduct.depth}cm</td>
+      <td>{activeProduct?.broad}cm</td>
+      <td>{activeProduct?.height}cm</td>
+      <td>{activeProduct?.depth}cm</td>
     </tr>
   </tbody>
 </table>
@@ -94,14 +91,15 @@ export const ProductPage = () => {
 
             >
               <img
-                src={activeProduct.imageURL}
+                src={activeProduct?.imageURL}
                 className="w-100 "
               />
             </div>
           </div>
+          {/* <ProductRecommended product={recommendedProducts}/>  */}
         </div>
         </>
       )}
     </>
   );
-};
+};  

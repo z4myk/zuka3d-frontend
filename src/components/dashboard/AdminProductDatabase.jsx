@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useProductStore} from '../../hooks/useProductStore';
 import {
     faPlus,
@@ -6,24 +6,35 @@ import {
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {AdminProductDatabaseItem} from './AdminProductDatabaseItem';
+import {useCounter} from '../../hooks/useCounter';
+import {Pagination} from '../home/Pagination';
+
 import {Link} from 'react-router-dom'
 import './dashboard.css'
 export const AdminProductDatabase = () => {
 
     const {products, startLoadingProducts} = useProductStore();
+    const { counter, decrement, increment, reset } = useCounter(1);
+    const maxProducts = 20;
+    const lastPage = Math.ceil(products?.length / maxProducts);
+
+    const [gameSearch, setGameSearch] = useState('');
+    const [elementSearch, setElementSearch] = useState([])
 
 
-    const getProducts = async() => {
-        try{
-        await startLoadingProducts();
-       }catch(error){
-           console.log(error)
-       }
-       }
+
+    const getSearchData = () => {
+      const filterData = products.filter((product) => product.name.toLowerCase().includes(gameSearch.toLowerCase())).reverse();
+      if (gameSearch.trim() === '') {
+        setElementSearch(products);
+      } else {
+        setElementSearch(filterData)
+      }
+    }
        
        useEffect(() => {
-        getProducts();  
-       }, [products])
+         getSearchData();
+       }, [products, gameSearch])
 
     return (
         <div className="container">
@@ -41,9 +52,12 @@ export const AdminProductDatabase = () => {
             <h3>Productos</h3>
         <hr />
         <div className="mb-3 mt-2">
-            <input type="text" placeholder="Buscar producto" className="w-100 form-control"/>
+            <input type="text" placeholder="Buscar producto" className="w-100 form-control"  value={gameSearch}
+            name="search"
+            onChange={(e) => setGameSearch(e.target.value)} />
         </div>
-        <table className="table table-light table-hover table-responsive text-light container">
+        <div className="p-2 table-responsive">
+        <table className="table table-light table-hover  text-light container">
         <thead>
           <tr className="">
             <th>ID</th>
@@ -55,12 +69,22 @@ export const AdminProductDatabase = () => {
           </tr>
         </thead>
         <tbody>
-        {products && products.map(product => (
-            <AdminProductDatabaseItem key={product._id} product={product} />
-        ))}
+        {elementSearch?.slice(
+            (counter - 1) * maxProducts,
+            (counter - 1) * maxProducts + maxProducts
+          ).map((product) => (
+            <AdminProductDatabaseItem key={product._id} product={product}  />
+          )).reverse()}
 
         </tbody>
       </table>
+          <Pagination 
+            page={counter}
+            decrement={decrement}
+            increment={increment}
+            lastPage={lastPage}
+            />
+      </div>
         </div>
         </div>
     )

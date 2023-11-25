@@ -12,29 +12,36 @@ const formFields = {
 }
 export const LoginPage = () => {
 
-    const {loginEmail, loginPassword, onInputChange, formState} = useForm(formFields);
+    const {loginEmail, loginPassword, onInputChange} = useForm(formFields);
     const navigate = useNavigate();
-    const {startLogin, errorMessage, user, status} = useAuthStore();
-
+    const {startLogin, errorMessage} = useAuthStore();
+    
     const handleLogin = async (e) => {
         e.preventDefault();
     
         try {
-        await startLogin({ email: loginEmail, password: loginPassword });
-        console.log(startLogin)
-            navigate('/');
+        const response = await startLogin({ email: loginEmail, password: loginPassword });
+        if (response && response.status) {
+            if (response.status === 200 || response.status === 201) {
+                navigate('/');
+            }
+          }
+        
         } catch (error) {
           Swal.fire({
-            icon: 'error',
-            title: 'Error de credenciales',
-            text: 'Por favor, verifica tu email y contraseña.',
+            position: "center",
+            icon: "error",
+            title: "Error de credenciales",
+            text: "Por favor, verifica tu email y contraseña.",
+            showConfirmButton: false,
+            timer: 1500,
           });
           console.log(error);
         }
       };
     
 
-console.log(user)
+
 
 
     useEffect(() => {
@@ -44,7 +51,7 @@ console.log(user)
       }, [errorMessage])
     return (
         <>
-            <section className="container shadow-lg text-dark card loginCard mt-3">
+            <section className="container shadow-lg text-dark card pb-3 mt-3">
                 <div className="text-center">
                     <img src={zukalogo} alt="Zuka logotipo" className="w-50" /> 
                 </div>
@@ -61,7 +68,7 @@ console.log(user)
 
                     <button className="btn btn-light text-light w-100 mt-2">Iniciar Sesión</button>
                     <div className="mt-3 ">
-              <Link className="text-center text-decoration-none mx-5" to='/auth/registrarse'><b>Crear una cuenta en zuka.cl</b></Link>
+              <Link className="text-center text-decoration-none mx-5" to='/auth/registrarse'><b>Crear una cuenta en zuka3d.cl</b></Link>
             </div>
                 </form>
                 </div>
