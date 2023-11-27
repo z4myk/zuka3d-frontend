@@ -40,9 +40,11 @@ export const Navbar = () => {
 
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className=" container ">
+          <Link to="/" className="text-decoration-none">
           <a className="navbar-brand" href="#">
             <img src={zukalogo} alt="Zukaprint 3D Logo " className="imgLogo" />
           </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
