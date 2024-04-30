@@ -62,7 +62,7 @@ export const AppRouter = () => {
 
   const getProductByCategory = async (category, state) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_DEV}/products/category/${category}`
+      `${import.meta.env.VITE_API_URL}/products/category/${category}`
     );
     state(response.data);
   };
