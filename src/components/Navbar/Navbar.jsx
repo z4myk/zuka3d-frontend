@@ -38,7 +38,7 @@ export const Navbar = () => {
   return (
     <div>
 
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg  bg-dark text-light">
         <div className=" container ">
           <Link to="/" className="text-decoration-none">
           <a className="navbar-brand" href="#">
@@ -57,17 +57,17 @@ export const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0  ">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 p-3 ">
               <li className="nav-item" onClick={clearSearchInput}>
-                <Link to="/" className="text-decoration-none">
-                  <a className="nav-link efectoLista" aria-current="page" href="#">
+                <Link to="/" className="text-decoration-none text-light">
+                  <a className="nav-link efectoLista text-light" aria-current="page" href="#">
                     <FontAwesomeIcon icon={faHome} className="text-warning" /> INICIO
                   </a>
                 </Link>
               </li>
               <li className="nav-item dropdown">
                 <a
-                  className="nav-link efectoLista "
+                  className="nav-link efectoLista text-light"
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -91,14 +91,14 @@ export const Navbar = () => {
          
               <li className="nav-item">
                 <Link to="/contacto" className="text-decoration-none">
-                  <a className="nav-link efectoLista " href="#">
+                  <a className="nav-link efectoLista text-light " href="#">
                     <FontAwesomeIcon icon={faPhone} className="text-warning" /> CONTACTO
                   </a>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/como-comprar" className="text-decoration-none">
-                  <a className="nav-link efectoLista" aria-current="page" href="#">
+                  <a className="nav-link efectoLista text-light" aria-current="page" href="#">
                     <FontAwesomeIcon icon={faCircleQuestion} className="text-warning" /> ¿Cómo Comprar?
                   </a>
                 </Link>
@@ -108,7 +108,7 @@ export const Navbar = () => {
                 (
                   <li className="nav-item">
                     <Link to="/administracion" className="text-decoration-none">
-                      <a className="nav-link efectoLista" >
+                      <a className="nav-link efectoLista text-light" >
                         Administración
                       </a>
                     </Link>
@@ -124,9 +124,9 @@ export const Navbar = () => {
             </ul>
 
             <Link to="/carrito" className="mt-1 ">
-              <FontAwesomeIcon icon={faCartShopping} className="text-dark iconoCart" size="1x" />
+              <FontAwesomeIcon icon={faCartShopping} className=" text-light iconoCart" size="1x" />
             </Link>
-            <span className="badge text-dark mb-2 ">({status === 'not-authenticated' ? cartItems.length : cartItems.length})</span>
+            <span className="badge text-light mb-2 ">({status === 'not-authenticated' ? cartItems.length : cartItems.length})</span>
             {status === "authenticated" ? (
               <li className="nav-item dropdown mb-4">
                 <a
@@ -136,7 +136,7 @@ export const Navbar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <button className="btn btn-outline-warning"><FontAwesomeIcon icon={faUser} className="text-dark" size="1x" /> <FontAwesomeIcon icon={faSortDown} className="mb-1" /></button>
+                  <button className="btn btn-outline-warning mt-4"><FontAwesomeIcon icon={faUser} className="text-light" size="1x" /> <FontAwesomeIcon icon={faSortDown} className="mb-1" /></button>
                 </a>
                 <ul className="dropdown-menu">
                   <li>
@@ -156,7 +156,7 @@ export const Navbar = () => {
             )
               : (
                 <Link to="/auth/iniciar-sesion" className="text-decoration-none">
-                  <button className="btn btn-light p-2 text-light">Iniciar sesión</button>
+                  <button className="btn btn-light border-dark p-2 text-light">Iniciar sesión</button>
                 </Link>
               )}
           </div>

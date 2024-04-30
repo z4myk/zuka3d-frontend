@@ -45,7 +45,7 @@ export const AdminProductDatabaseItem = ({product}) => {
                 <td ># {product._id}</td>
                 <td>{product.name}</td>
                 <td>{product.category}</td>
-                <td>{product.description}</td>
+                <td>{product.description.slice(0,30) + "..."}</td>
                 <td>${product.price}</td>
 
                 <td className="d-flex gap-1">

@@ -46,13 +46,26 @@ html {
 
 .cardProduct{
   width: 250px;
-  height: 350px;
+  height: 430px;
   border: 1px solid #ecf019;
 }
 .cardProduct:hover{
   
  
   cursor: pointer;
+}
+.cardProduct img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Esto ayuda a mantener la proporción y cubrir el espacio disponible */
+}
+
+.cardProduct button {
+  width: 100%;
+}
+
+p {
+  white-space: pre-wrap;
 }
 
  /* efecto menu de navegacion  */
@@ -61,12 +74,14 @@ html {
   letter-spacing: 0.5px;
   padding: 0 10px;
   margin: 10px;
-  color: #000000 !important;
+  
 }
 .efectoLista:hover{
-  color: #4f4f4f !important;
+  color: #b6b6b6 !important;
 }
-
+li{
+  list-style-type: none;
+}
 .efectoLista:after{
    content: "";
    position: absolute;

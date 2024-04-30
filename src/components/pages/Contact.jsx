@@ -1,7 +1,7 @@
 import React from 'react'
 import zukalogo from "../../assets/zukalogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import  {Link} from 'react-router-dom'
 import {
   faInstagram,
   faFacebook,
@@ -23,7 +23,9 @@ export const Contact = () => {
             <img src={zukalogo} className="w-100"/>
                         <hr className="text-warning" />
                         <div className="d-flex justify-content-center gap-3">
+                            <a href="https://www.instagram.com/zuka3dprint/?hl=es-la" target="_blank">
                             <FontAwesomeIcon icon={faInstagram} size="2x" className="text-danger" />
+                            </a>
                             <FontAwesomeIcon icon={faFacebook}  size="2x" className="text-primary" />
                         </div>
                        

@@ -15,8 +15,31 @@ export const Cart = () => {
     incrementCart,
   } = useCartContext();
 
-  console.log(cartItems)
-  const shippingCost = cartItems.length >= 2 || cartItems[0]?.quantity >= 2 ? 7600 : 5900;
+ 
+  // const shippingCost = cartItems.length >= 2 || cartItems[0]?.quantity >= 2 ? 9000 : 7000;
+
+  function calculateTotalItems(cartItems) {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  function calculateShippingCost(cartItems) {
+    if (cartItems.length === 0) {
+      return 7000; // Costo base si el carrito está vacío
+    }
+    const totalItems = calculateTotalItems(cartItems);
+   
+
+    if (totalItems === 1) {
+      return 7000;
+    } else if (totalItems === 2) {
+      return 9000;
+    } else if (totalItems >= 3) {
+      return 11000;
+    }
+    return 7000; // Redundante pero asegura cobertura
+  }
+
+  const shippingCost = calculateShippingCost(cartItems);
 
   const handleRemoveFromCart = (productId) => {
     removeFromCart(productId);
@@ -68,7 +91,7 @@ export const Cart = () => {
                     <td>
                       <img src={items.imageURL} className="imageCart" />
                     </td>
-                    <td>{items.name}</td>
+                <td>{items?.selectedAccessories.length === 0 ? items.name : `${items.name} + ${items.selectedAccessories} Accesorios` }</td>
                     <td>${items.price}</td>
                     <td>
                       <button
@@ -109,15 +132,15 @@ export const Cart = () => {
                   <th scope="col">${getTotalPrice()}</th>
                   <td
                     className={
-                      getTotalPrice() >= 60000 ? "text-success" : "text-dark"
+                      getTotalPrice() >= 120000 ? "text-success" : "text-dark"
                     }
                   >
-                    {getTotalPrice() >= 60000 ? (<b>Gratis</b>) : (<b>${shippingCost}</b>)}
+                    {getTotalPrice() >= 120000 ? (<b>Gratis</b>) : (<b>${shippingCost}</b>)}
                   </td>
                   <td>
                     <b>
                       $
-                      {getTotalPrice() >= 60000
+                      {getTotalPrice() >= 120000
                         ? getTotalPrice()
                         : getTotalPrice() + shippingCost}
                     </b>

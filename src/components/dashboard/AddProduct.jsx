@@ -16,6 +16,8 @@ const formFields = {
   height: "",
   broad: "",
   depth: "",
+  maxAccessories: "",
+  accessoryCost: "",
 };
 
 export const AddProduct = () => {
@@ -28,6 +30,8 @@ export const AddProduct = () => {
     height,
     broad,
     depth,
+    maxAccessories,
+    accessoryCost,
     onInputChange,
     formState,
     setFormState,
@@ -63,6 +67,8 @@ export const AddProduct = () => {
       formData.append("height", formState.height);
       formData.append("broad", formState.broad);
       formData.append("depth", formState.depth);
+      formData.append("maxAccessories", formState.maxAccessories);
+      formData.append("accessoryCost", formState.accessoryCost);
       formData.append("image", formState.image);
       try {
         const response = await startSavingProducts(formData);
@@ -208,6 +214,31 @@ export const AddProduct = () => {
               required
             />
           </div>
+          <div className="mb-3">
+            <label>Cantidad de accesorios:</label>
+            <input
+              type="number"
+              placeholder="numero de la cantidad de accesorios posibles"
+              name="maxAccessories"
+              value={maxAccessories}
+              onChange={onInputChange}
+              className="w-100 p-2 form-control inputBorders"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label>Precio por accesorio:</label>
+            <input
+              type="number"
+              placeholder="Precio por accesorio"
+              name="accessoryCost"
+              value={accessoryCost}
+              onChange={onInputChange}
+              className="w-100 p-2 form-control inputBorders"
+              required
+            />
+          </div>
+          
           <button className="w-100 btn btn-success" type="submit">
             Agregar
           </button>

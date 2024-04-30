@@ -22,7 +22,7 @@ export const HomePage = () => {
 
     return (
       <>
-        <marquee className="bg-warning  text-light w-100 p-2"> <b className="">🛒ENVIOS GRATIS A TODO EL PAIS POR COMPRAS SUPERIORES A $80.000 COBERTURA EN TODO CHILE! </b> </marquee>
+        <marquee className="bg-warning  text-light w-100 p-2"> <b className="">🛒ENVIOS GRATIS A TODO EL PAIS POR COMPRAS SUPERIORES A $120.000 COBERTURA EN TODO CHILE! </b> </marquee>
       
         <div className="container">
             <div className="text-center">
@@ -45,16 +45,17 @@ export const HomePage = () => {
 
             <h4 className="text-dark mt-5">Ultimos productos agregados</h4>
             <hr className="text-dark mb-5" />
-            <h3 className="text-center text-dark">Agenda de noviembre y diciembre cerrada. </h3>
-            <p className="text-center text-dark">Si quieres agendar tu Funko personalizado para enero, escríbenos a 
-<b> contacto@zuka3d.cl</b></p>
-<div className="text-center">
-<img src={carita}/>
-</div>
+        
             <section className=" d-flex justify-content-around flex-wrap ">
             {/* <ProductCard /> */}
             <ProductItem product={products} />
             </section>
+            <h3 className="text-center text-dark mt-5">¡nuestra agenda está abierta para personalizar Funkos especialmente para mamá! 🎉</h3>
+            <p className="text-center text-dark">Si quieres agendar tu Funko personalizado para Mayo, escríbenos a 
+            <b> contacto@zuka3d.cl</b></p>
+<div className="text-center">
+<img src={carita} alt="emoji cara triste" />
+</div>
             <IconsFooter />
 
         </div>

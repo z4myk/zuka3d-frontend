@@ -41,7 +41,7 @@ export const UserOrdersPaymentId = () => {
     paymentId: paymentAd,
     }
 
-    console.log(formData)
+    
 
 
     useEffect(() => {

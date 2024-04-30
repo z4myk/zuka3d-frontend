@@ -62,7 +62,7 @@ export const AppRouter = () => {
 
   const getProductByCategory = async (category, state) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/products/category/${category}`
+      `${import.meta.env.VITE_API_DEV}/products/category/${category}`
     );
     state(response.data);
   };
@@ -73,7 +73,7 @@ export const AppRouter = () => {
         <Navbar />
         <div className="container mt-3 authloader">
           <div className="spinner"></div>
-          <div>Cargando</div>
+          <div>Cargando...</div>
         </div>
       </>
     );

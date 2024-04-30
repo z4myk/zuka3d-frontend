@@ -90,7 +90,7 @@ export const AdminOrdersInformationId = () => {
   };
   return (
     <>
-      <section className="text-dark container text-center">
+      <section className="text-dark container text-center mt-2">
         <div className="row">
           <Link to="/administracion/pedidos" className="text-decoration-none">
             <button className="  btn btn-warning text-light w-100">
@@ -177,8 +177,12 @@ export const AdminOrdersInformationId = () => {
                   <b className="text-success">${activeOrder?.totalPrice} CLP</b>
                 </p>
                 <p>
-                  Productos:{" "}
-                  <b>{activeOrder?.details.map((detail) => detail + " ")}</b>
+                Productos: {activeOrder?.details.map((detail) => detail + " ")}{" "}
+              {activeOrder?.selectedAccesories !== null ? (
+                <span> + {activeOrder.selectedAccesories} Accesorios</span>
+              ) : (
+                <span></span>
+              )}
                 </p>
               </div>
               <div>

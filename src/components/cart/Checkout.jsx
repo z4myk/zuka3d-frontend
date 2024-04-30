@@ -18,6 +18,7 @@ const formFields = {
   email: "",
   totalPrice: "",
   details: "",
+  selectedAccesories: "",
   trackingCode: "No disponible",
   status: "Sin Informar",
   terms: false,
@@ -119,19 +120,44 @@ export const Checkout = () => {
     "Yungay",
   ];
 
-  console.log(comuna.length)
+  
   
   const { cartItems, getTotalPrice} = useCartContext();
   const { status, checkAuthToken, user } = useAuthStore();
   const { startSavingOrders } = useOrderStore();
-  const shippingCost = cartItems.length >= 2 || cartItems[0].quantity >= 2 ? 7600 : 5900;
+  // const shippingCost = cartItems.length >= 2 || cartItems[0].quantity >= 2 ? 9000 : 7000;
   const userEmail = user.email;
   const URL = import.meta.env.VITE_API_URL;
  const navigate = useNavigate();
   const { onInputChange, formState, onResetForm } = useForm(formFields);
+  
+  function calculateTotalItems(cartItems) {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  function calculateShippingCost(cartItems) {
+    if (cartItems.length === 0) {
+      return 7000; // Costo base si el carrito está vacío
+    }
+    const totalItems = calculateTotalItems(cartItems);
+  
+
+    if (totalItems === 1) {
+      return 7000;
+    } else if (totalItems === 2) {
+      return 9000;
+    } else if (totalItems >= 3) {
+      return 11000;
+    }
+    return 7000; // Redundante pero asegura cobertura
+  }
+
+  const shippingCost = calculateShippingCost(cartItems);
+  
+
 
   const calculateTotalPrice = () => {
-    const lastTotalPrice = getTotalPrice() >= 80000 ? getTotalPrice() : getTotalPrice() + shippingCost;
+    const lastTotalPrice = getTotalPrice() >= 120000 ? getTotalPrice() : getTotalPrice() + shippingCost;
     return lastTotalPrice;
   };
   
@@ -139,6 +165,12 @@ export const Checkout = () => {
     const totalDetails = cartItems.map((items) => (items.name + " " + "X" + items.quantity ))
     return totalDetails;
   };
+
+  const calculateAccesories = () => {
+    const accesories = cartItems.map((item) => item.selectedAccessories)
+    return accesories;
+
+  }
 
   const clearShopInformationAndRedirect = () => {
     navigate("/mis-compras");
@@ -159,10 +191,13 @@ export const Checkout = () => {
     rut: formState.rut,
     status: formState.status,
     terms: formState.terms,
+    selectedAccesories: calculateAccesories(),
     trackingCode: formState.trackingCode,
     totalPrice: calculateTotalPrice(),
     details: calculateDetails(),
   };
+
+  
 
     const handleCheckboxChange = (event) => {
       const { name, checked } = event.target;
@@ -175,9 +210,10 @@ export const Checkout = () => {
     const handleSubmit = async(e) => {
       e.preventDefault();
       
-      console.log(formData)
+      
       try{
         const res = await axios.post(`${URL}/orders`, formData)
+        console.log(res)
         if (res && res.status) {
           if (res.status === 200 || res.status === 201) {
             Swal.fire({
@@ -356,7 +392,7 @@ export const Checkout = () => {
                 <tbody className="text-center">
                   {cartItems.map((items) => (
                     <tr className="border" key={items._id}>
-                      <td className="p-3">{items.name}</td>
+                      <td>{items?.selectedAccessories.length === 0 ? items.name : `${items.name} + ${items.selectedAccessories} Accesorios` }</td>
                       <td>{items.quantity}</td>
                       <td>${items.price * items.quantity}</td>
                     </tr>
@@ -368,12 +404,12 @@ export const Checkout = () => {
                 <p>
                   <b 
                         className={
-                          getTotalPrice() >= 80000
+                          getTotalPrice() >= 120000
                             ? "text-success"
                             : "text-dark"
                         }
                       >
-                        {getTotalPrice() >= 80000 ? (
+                        {getTotalPrice() >= 120000 ? (
                           <b className="">Gratis</b>
                         ) : (
                           <b>${shippingCost}</b>

@@ -41,22 +41,20 @@ export const ProductCard = (item) => {
   }, [products])
 
     return (
-        <div className=" d-flex justify-content-around flex-wrap ">
+        <div className=" flex-wrap ">
             {/* {products?.map((product) => (
                 <ProductItem  product={product} key={product._id} />
             )).reverse()} */}
-        <div className="d-flex justify-content-around mb-3" >
-
+        <div className="mb-3" >
 <div className="cardProduct shadow-lg text-dark container card">
     <div className="">
-        <img src={item.imageURL}  className="w-100 mt-1"/>
+        <img src={item.imageURL}  className="p-2 mt-1 border-dark"/>
     </div>
     <div className="text-center mt-3">
         <h5><b>{item.name}</b></h5>
-       
     </div>
     <div>
-        <p className="small text-secondary">{item.category}</p>
+        <p className="small text-secondary descriptionProduct">{item.category}</p>
     </div>
     <div className="d-flex justify-content-between">
     <p className="text-success">${item.price} <span className="text-dark">CLP</span></p>

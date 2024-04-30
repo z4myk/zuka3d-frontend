@@ -19,7 +19,7 @@ export const ProductCardByCategory = ({ getProductByCategory }) => {
 
   return (
     <>
-      <marquee className="bg-warning  text-light w-100 p-2"> <b className="">🛒 ENVIOS GRATIS A TODO EL PAIS POR COMPRAS SUPERIORES A $80.000 COBERTURA EN TODO CHILE!</b> </marquee>
+      <marquee className="bg-warning  text-light w-100 p-2"> <b className="">🛒 ENVIOS GRATIS A TODO EL PAIS POR COMPRAS SUPERIORES A $120.000 COBERTURA EN TODO CHILE!</b> </marquee>
       <h4 className="text-dark container mt-3">
         <b>{category}</b>
       </h4>
@@ -30,7 +30,7 @@ export const ProductCardByCategory = ({ getProductByCategory }) => {
       <div className="productCard d-flex justify-content-around flex-wrap text-dark container">
         {categoryData !== null ? (
           categoryData.map((product) => (
-           <ProductItemByCategory product={product} />
+           <ProductItemByCategory product={product} key={product._id}/>
           ))
         ) : (
           <h4 className="text-dark">Cargando productos...</h4>
